@@ -4,6 +4,9 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/auth');
+const faultsRoutes = require('./routes/faults');
+const toolsRoutes = require('./routes/tools');
+const tasksRoutes = require('./routes/tasks');
 const authMiddleware = require('./middleware/authMiddleware');
 
 dotenv.config();
@@ -14,6 +17,9 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/faults', authMiddleware, faultsRoutes);
+app.use('/api/tools', authMiddleware, toolsRoutes);
+app.use('/api/tasks', authMiddleware, tasksRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log ('MongoDB Connected'))
@@ -23,7 +29,7 @@ app.get('/', (req, res) => {
     res.send('API is running')
 });
 
-const PORT = process.env.port || 5000;
+const PORT = process.env.PORT || 5000;
 
 app.get('/api/protected', authMiddleware, (req, res) => {
 
